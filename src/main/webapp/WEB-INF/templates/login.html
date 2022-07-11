@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="登录页面">标题</title>
+</head>
+
+<body>
+<!-- 上下文路径 ==  /工程名 ，此时   @{/index}  ===  http://ip:port/工程名/index-->
+<a th:href="@{/index}"/>
+<!--  路径后面跟参数的写法-->
+<!--<a th:href="@{/index(username='tom',password=123456)}" />-->
+<h1>Hello,SpringMVC web</h1>
+
+<a th:href="@{/login/12/tom}">使用占位符方式传递参数</a>
+
+
+
+</body>
+</html> 

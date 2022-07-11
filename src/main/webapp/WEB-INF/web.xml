@@ -1,0 +1,72 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+
+
+    <!--
+        获取参数之前才能有效，获取了参数之后该  Filter 无效
+        请求至 DispatcherServlet 时，该Servlet 已经获取到了参数，而设置编码时机必须比Servlet 获取参数的时间要早，才能解决编码问题，
+        获取请求参数之前设置编码为 UTF-8 解决 post 乱码
+        三大组件：Servlet  Listener   Filter
+        执行顺序： ServletContextListener（负责监听 ServletContext 的创建和销毁，只执行一次）  >   Filter   >  Servlet > Interceptor
+        所以解决 post 乱码，最好使用 Filter ，为每次请求到 @Controller 中都进行编码设置
+    -->
+    <filter>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>forceResponseEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+
+    <!--    配置 HiddenHttpMethodFilter http 请求方式的过滤器(支持 PUT, DELETE,BATCH)：获取参数为 _method 的值，put  delete  batch ，http 请求方式一定为 post-->
+    <filter>
+        <filter-name>HiddenHttpMethodFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>HiddenHttpMethodFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+<!--  配置 DispatcherServlet 覆盖 tomcat 中 DefaultServlet 成为Web应用的默认的Servlet -->
+<!--   配置 SpringMVC 的前端控制器，当浏览器发送请求时都交给 DispatcherServlet 处理-->
+  <servlet>
+    <servlet-name>SpringMVC-web</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+
+<!--    配置SpringMVC 配置文件的位置和名称，接下来由 SpringMVC.xml 做配置-->
+    <init-param>
+<!--       固定名称 contextConfigLocation  ,自定义 springMVC 的配置文件 -->
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:springMVC.xml</param-value>
+    </init-param>
+<!--      将前端控制器 org.springframework.web.servlet.DispatcherServlet 类在服务器启动时就初始化好-->
+      <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>SpringMVC-web</servlet-name>
+<!--   <url-pattern>/</url-pattern>     <url-pattern>/*</url-pattern>
+        /  和  /* 的区别
+          1. /  不配置静态资源，会将后缀去掉进行匹配，tomcat的默认servlet，当其他的url-pattern匹配不上时都会走这个servlet，匹配所有请求，当项目中配置了"/"，会覆盖掉tomcat中的default servlet，
+                静态资源（js，css，image,html等）的访问都将交给该servlet处理，而jsp页面则交给servlet容器内置的JSP servlet处理
+          2. /*  会匹配所有的url：路径型的和后缀型的url(包括/springmvc，.jsp，.js和*.html等)。如使用过滤器时，需要对所有请求进行过滤，需要使用 /*
+ -->
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+</web-app>

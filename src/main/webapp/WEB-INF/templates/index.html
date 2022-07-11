@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1> INDEX.HTML</h1>
+
+<form th:action="@{/getParam/servletParam}" method="post">
+    姓名：<input type="text" name="name"></br>
+    密码：<input type="password" name="passsword"></br>
+    <input type="submit" value="servlet原生获取参数">
+</form>
+
+
+<form th:action="@{/getParam/mvcParam}" method="post">
+    姓名：<input type="text" name="name"></br>
+    密码：<input type="password" name="pass"></br>
+    <input type="submit" value="RequestParam获取参数">
+</form>
+
+
+<a th:href="@{/scope/servletScope}">servlet 在域对象中存储数据</a></br>
+<a th:href="@{/scope/mvcScope}">mvc 在域对象中存储数据</a></br>
+<a th:href="@{/scope/modelScope}">model 在域对象中存储数据</a></br>
+<a th:href="@{/scope/modelMapScope}">modelMap 在域对象中存储数据</a></br>
+<a th:href="@{/scope/mapScope}">map 在域对象中存储数据</a></br>
+<a th:href="@{/scope/sessionScope}">sessionScope 在域对象中存储数据</a></br>
+<a th:href="@{/scope/contextScope}">contextScope 在域对象中存储数据</a></br>
+</body>
+</html>

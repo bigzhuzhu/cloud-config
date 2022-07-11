@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--引入属性文件 -->
+    <properties resource="jdbc.properties"></properties>
+
+    <settings>
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+<!--    开启驼峰命名自动映射    -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+<!--     	指定对象的哪些方法触发一次延迟加载   -->
+        <setting name="lazyLoadTriggerMethods" value="true"/>
+    </settings>
+
+    <typeAliases>
+<!--        <typeAlias alias="BlogUser" type="org.rola.basemvc.bean.BlogUser"/>-->
+        <package name="org.rola.basemvc.bean"/>
+    </typeAliases>
+    <environments default="test">
+        <environment id="test">
+<!--
+    type
+       JDBC ： 直接使用了 JDBC 的提交和回滚设施，它依赖从数据源获得的连接来管理事务作用域。
+       MANAGED:被管理，如 spring中的AOP，AOP的应用就是可以使用声明式事务，那么在 Spring + mybatis 整合中，就可以使用 AOP 的声明式事务管理 mybatis 的事务
+-->
+            <transactionManager type="JDBC"/>
+            <!--            使用连接池作为数据源 ，对数据库连接进行保存，方便以后使用-->
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--  映射文件配置  -->
+    <mappers>
+        <mapper resource="mapper/BlogUserMapper.xml"/>
+
+<!--        以包为单位引入映射文件
+             要求：
+             1. mapper 接口所在的包和映射文件所在包一致
+             2. mapper接口要和映射文件名一致
+-->
+<!--        <package name="org.rola.basemvc.mapper"/>-->
+    </mappers>
+
+</configuration>
